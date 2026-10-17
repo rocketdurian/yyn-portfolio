@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>三维视觉设计 | 启程智远集团官网</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0a0a0f',
+                        secondary: '#1a1a2e',
+                        cta: '#ffffff',
+                        ctaHover: '#e0e0e0',
+                        accent: '#7b2cbf',
+                        background: '#050508',
+                        text: '#ffffff'
+                    },
+                    fontFamily: {
+                        archivo: ['Archivo', 'sans-serif'],
+                        'space-grotesk': ['Space Grotesk', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        * {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Archivo', sans-serif;
+            background-color: #050508;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .image-card {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .image-container {
+            width: 100%;
+            max-width: 2400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .image-wrapper {
+            position: relative;
+            width: 100%;
+            /* 2400x1016 比例 = 2.362:1，使用 padding-bottom 维持宽高比 */
+            padding-bottom: 42.38%; /* 1016/2400 * 100% */
+            overflow: hidden;
+            border-radius: 16px;
+        }
+        
+        .image-wrapper img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+        
+        .image-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+        }
+        
+        .image-label {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            backdrop-filter: blur(4px);
+            z-index: 10;
+        }
+        
+        .btn-primary {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Navigation -->
+    <nav class="fixed top-4 left-4 right-4 z-50 rounded-2xl px-6 py-4 flex justify-between items-center max-w-7xl mx-auto backdrop-blur-md bg-background/80 border border-white/10 shadow-sm">
+        <a href="project-official.html" class="text-2xl font-bold font-space-grotesk text-white hover:text-cta transition-colors duration-200 cursor-pointer">
+            ← 返回上一页
+        </a>
+        <a href="index.html" class="text-gray-400 hover:text-white transition-colors duration-200 cursor-pointer">
+            返回首页
+        </a>
+    </nav>
+    
+    <!-- Main Content -->
+    <main class="pt-32 pb-20 px-6">
+        <div class="max-w-4xl mx-auto">
+            <!-- Title Section -->
+            <div class="text-center mb-16 reveal">
+                <span class="inline-block bg-cta/10 text-cta px-4 py-2 rounded-full text-sm font-medium mb-4">三维视觉设计</span>
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                    B端banner元素建模
+                </h1>
+                <p class="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
+                    探索三维设计在品牌视觉中的无限可能
+                </p>
+            </div>
+            
+            <!-- Gallery Section -->
+            <section class="space-y-12 reveal">
+                <!-- Image 1 -->
+                <div class="image-card rounded-2xl overflow-hidden shadow-lg">
+                    <div class="image-label">力企云官网视觉配图</div>
+                    <div class="image-container">
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/t4J8RGR1/saas2.png" alt="三维视觉设计 1" loading="lazy">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Image 2 -->
+                <div class="image-card rounded-2xl overflow-hidden shadow-lg">
+                    <div class="image-label">力企云官网视觉配图</div>
+                    <div class="image-container">
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/k4bXb2Qn/saas2-1.png" alt="三维视觉设计 2" loading="lazy">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Image 3 -->
+                <div class="image-card rounded-2xl overflow-hidden shadow-lg">
+                    <div class="image-label">力企云SaaS小程序视觉配图</div>
+                    <div class="image-container">
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/YCwK3stw/saas-xiao-cheng-xu-shou-ye3.png" alt="三维视觉设计 3" loading="lazy">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Image 4 -->
+                <div class="image-card rounded-2xl overflow-hidden shadow-lg">
+                    <div class="image-label">力企云SaaS小程序视觉配图</div>
+                    <div class="image-container">
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/bYtq9b1L/untitled2-kao-bei.png" alt="三维视觉设计 4" loading="lazy">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Image 5 -->
+                <div class="image-card rounded-2xl overflow-hidden shadow-lg">
+                    <div class="image-label">智飞部内部网站配图</div>
+                    <div class="image-container">
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/0jbMVNdd/6.png" alt="三维视觉设计 5" loading="lazy">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Image 6 -->
+                <div class="image-card rounded-2xl overflow-hidden shadow-lg">
+                    <div class="image-label">智飞部内部网站配图</div>
+                    <div class="image-container">
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/R0vytjVZ/123.png" alt="三维视觉设计 6" loading="lazy">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Image 7 -->
+                <div class="image-card rounded-2xl overflow-hidden shadow-lg">
+                    <div class="image-label">力企云SaaS小程序视觉配图</div>
+                    <div class="image-container">
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/W4RL8rQ5/3-4-4.png" alt="三维视觉设计 7" loading="lazy">
+                        </div>
+                    </div>
+                </div>
+    
+            </section>
+            
+            <!-- Back to Category -->
+            <div class="text-center mt-16 reveal">
+                <a href="project-official.html" class="btn-primary inline-block bg-primary text-white px-8 py-4 rounded-full font-medium hover:bg-secondary transition-all duration-300">
+                    ← 返回作品分类
+                </a>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="py-8 px-6 border-t border-white/10">
+        <div class="max-w-7xl mx-auto text-center">
+            <p class="text-gray-400 text-sm">
+                © 2026 杨一楠。All rights reserved.
+            </p>
+        </div>
+    </footer>
+    
+    <script>
+        // Scroll Reveal Animation
+        function reveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            reveals.forEach(element => {
+                const windowHeight = window.innerHeight;
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 100;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    element.classList.add('active');
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', reveal);
+        reveal(); // Initial check
+        
+        console.log('3D Design page loaded successfully!');
+    </script>
+</body>
+</html>

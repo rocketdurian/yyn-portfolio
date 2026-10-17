@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>内部项目申报查询小程序 | 设计作品详情</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#ffffff',
+                        secondary: '#A1A1AA',
+                        cta: '#2563EB',
+                        background: '#0a0a0f',
+                        text: '#ffffff'
+                    },
+                    fontFamily: {
+                        archivo: ['Archivo', 'sans-serif'],
+                        'space-grotesk': ['Space Grotesk', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        * {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Archivo', sans-serif;
+            background-color: #0a0a0f;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .image-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .image-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+        }
+        
+        .btn-primary {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        .copy-success {
+            animation: pulse 0.5s ease-in-out;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        /* iPhone Model Styles */
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .phone-model-wrapper {
+            transition: transform 0.3s ease;
+        }
+        
+        .phone-model-wrapper:hover {
+            transform: translateY(-5px);
+        }
+        
+        /* 图片优化 */
+        .screen-content img {
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Navigation -->
+    <nav class="fixed top-4 left-4 right-4 z-50 rounded-2xl px-6 py-4 flex justify-between items-center max-w-7xl mx-auto backdrop-blur-md bg-black/80 shadow-sm border border-white/10">
+        <a href="index.html" class="text-2xl font-bold font-space-grotesk text-white hover:text-cta transition-colors duration-200 cursor-pointer">
+            ← 返回首页
+        </a>
+        <a href="index.html#work" class="text-gray-400 hover:text-white transition-colors duration-200 cursor-pointer">
+            查看更多作品
+        </a>
+    </nav>
+    
+    <!-- Main Content -->
+    <main class="pt-32 pb-20 px-6">
+        <div class="max-w-6xl mx-auto">
+            <!-- Title Section -->
+            <div class="text-center mb-16 reveal">
+                <span class="inline-block bg-cta/10 text-cta px-4 py-2 rounded-full text-sm font-medium mb-4">移动办公应用</span>
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                    内部项目申报查询小程序
+                </h1>
+                <p class="text-xl text-secondary max-w-3xl mx-auto leading-relaxed">
+                    高效办公，集成政策项目查询、企业信息展示、客户管理沟通于一体。
+                </p>
+            </div>
+            
+            <!-- Visual Showcase Section -->
+            <section class="mb-20 reveal">
+                <h2 class="text-3xl font-bold mb-8 text-center">视觉精选</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center">
+                    <!-- Phone Model 1 -->
+                    <div class="phone-model-wrapper relative">
+                        <div class="iphone-frame relative mx-auto" style="width: 375px; height: 812px;">
+                            <div class="phone-screen overflow-hidden rounded-[40px] border-8 border-gray-900 shadow-2xl bg-black" style="height: 100%;">
+                                <div class="screen-content" style="height: 100%;">
+                                    <img src="https://i.postimg.cc/MGNcp55P/1.png" alt="设计作品 1" class="w-full" style="min-height: 100%; object-fit: cover;" draggable="false">
+                                </div>
+                            </div>
+                            <!-- Notch -->
+                            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-7 bg-gray-900 rounded-b-2xl z-10"></div>
+                        </div>
+                    </div>
+                    <!-- Phone Model 2 -->
+                    <div class="phone-model-wrapper relative">
+                        <div class="iphone-frame relative mx-auto" style="width: 375px; height: 812px;">
+                            <div class="phone-screen overflow-hidden rounded-[40px] border-8 border-gray-900 shadow-2xl bg-black" style="height: 100%;">
+                                <div class="screen-content" style="height: 100%;">
+                                    <img src="https://i.postimg.cc/pTjmhj1f/2.png" alt="设计作品 2" class="w-full" style="min-height: 100%; object-fit: cover;" draggable="false">
+                                </div>
+                            </div>
+                            <!-- Notch -->
+                            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-7 bg-gray-900 rounded-b-2xl z-10"></div>
+                        </div>
+                    </div>
+                    <!-- Phone Model 3 -->
+                    <div class="phone-model-wrapper relative">
+                        <div class="iphone-frame relative mx-auto" style="width: 375px; height: 812px;">
+                            <div class="phone-screen overflow-hidden rounded-[40px] border-8 border-gray-900 shadow-2xl bg-black" style="height: 100%;">
+                                <div class="screen-content" style="height: 100%;">
+                                    <img src="https://i.postimg.cc/XNwZnwCL/3.png" alt="设计作品 3" class="w-full" style="min-height: 100%; object-fit: cover;" draggable="false">
+                                </div>
+                            </div>
+                            <!-- Notch -->
+                            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-7 bg-gray-900 rounded-b-2xl z-10"></div>
+                        </div>
+                    </div>
+                    <!-- Phone Model 4 -->
+                    <div class="phone-model-wrapper relative">
+                        <div class="iphone-frame relative mx-auto" style="width: 375px; height: 812px;">
+                            <div class="phone-screen overflow-hidden rounded-[40px] border-8 border-gray-900 shadow-2xl bg-black" style="height: 100%;">
+                                <div class="screen-content" style="height: 100%;">
+                                    <img src="https://i.postimg.cc/02nbwPZX/4.png" alt="设计作品 4" class="w-full" style="min-height: 100%; object-fit: cover;" draggable="false">
+                                </div>
+                            </div>
+                            <!-- Notch -->
+                            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-7 bg-gray-900 rounded-b-2xl z-10"></div>
+                        </div>
+                    </div>
+                    <!-- Phone Model 5 -->
+                    <div class="phone-model-wrapper relative">
+                        <div class="iphone-frame relative mx-auto" style="width: 375px; height: 812px;">
+                            <div class="phone-screen overflow-hidden rounded-[40px] border-8 border-gray-900 shadow-2xl bg-black" style="height: 100%;">
+                                <div class="screen-content" style="height: 100%;">
+                                    <img src="https://i.postimg.cc/QdMVgwyL/5.png" alt="设计作品 5" class="w-full" style="min-height: 100%; object-fit: cover;" draggable="false">
+                                </div>
+                            </div>
+                            <!-- Notch -->
+                            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-7 bg-gray-900 rounded-b-2xl z-10"></div>
+                        </div>
+                    </div>
+                    <!-- Phone Model 6 -->
+                    <div class="phone-model-wrapper relative">
+                        <div class="iphone-frame relative mx-auto" style="width: 375px; height: 812px;">
+                            <div class="phone-screen overflow-hidden rounded-[40px] border-8 border-gray-900 shadow-2xl bg-black" style="height: 100%;">
+                                <div class="screen-content" style="height: 100%;">
+                                    <img src="https://i.postimg.cc/g2BjgsCx/6.png" alt="设计作品 6" class="w-full" style="min-height: 100%; object-fit: cover;" draggable="false">
+                                </div>
+                            </div>
+                            <!-- Notch -->
+                            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-7 bg-gray-900 rounded-b-2xl z-10"></div>
+                        </div>
+                    </div>
+                    <!-- Phone Model 7 -->
+                    <div class="phone-model-wrapper relative">
+                        <div class="iphone-frame relative mx-auto" style="width: 375px; height: 812px;">
+                            <div class="phone-screen overflow-hidden rounded-[40px] border-8 border-gray-900 shadow-2xl bg-black" style="height: 100%;">
+                                <div class="screen-content" style="height: 100%;">
+                                    <img src="https://i.postimg.cc/XvGJmFWD/7.png" alt="设计作品 7" class="w-full" style="min-height: 100%; object-fit: cover;" draggable="false">
+                                </div>
+                            </div>
+                            <!-- Notch -->
+                            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-7 bg-gray-900 rounded-b-2xl z-10"></div>
+                        </div>
+                    </div>
+                    <!-- Phone Model 8 -->
+                    <div class="phone-model-wrapper relative">
+                        <div class="iphone-frame relative mx-auto" style="width: 375px; height: 812px;">
+                            <div class="phone-screen overflow-hidden rounded-[40px] border-8 border-gray-900 shadow-2xl bg-black" style="height: 100%;">
+                                <div class="screen-content" style="height: 100%;">
+                                    <img src="https://i.postimg.cc/mrvDsDZv/8.png" alt="设计作品 8" class="w-full" style="min-height: 100%; object-fit: cover;" draggable="false">
+                                </div>
+                            </div>
+                            <!-- Notch -->
+                            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-7 bg-gray-900 rounded-b-2xl z-10"></div>
+                        </div>
+                    </div>
+                    <!-- Phone Model 9 -->
+                    <div class="phone-model-wrapper relative">
+                        <div class="iphone-frame relative mx-auto" style="width: 375px; height: 812px;">
+                            <div class="phone-screen overflow-hidden rounded-[40px] border-8 border-gray-900 shadow-2xl bg-black" style="height: 100%;">
+                                <div class="screen-content" style="height: 100%;">
+                                    <img src="https://i.postimg.cc/DZ1zyT8w/9.png" alt="设计作品 9" class="w-full" style="min-height: 100%; object-fit: cover;" draggable="false">
+                                </div>
+                            </div>
+                            <!-- Notch -->
+                            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-7 bg-gray-900 rounded-b-2xl z-10"></div>
+                        </div>
+                    </div>
+                    <!-- Phone Model 10 -->
+                    <div class="phone-model-wrapper relative">
+                        <div class="iphone-frame relative mx-auto" style="width: 375px; height: 812px;">
+                            <div class="phone-screen overflow-hidden rounded-[40px] border-8 border-gray-900 shadow-2xl bg-black" style="height: 100%;">
+                                <div class="screen-content" style="height: 100%;">
+                                    <img src="https://i.postimg.cc/HnHkrhyt/10.png" alt="设计作品 10" class="w-full" style="min-height: 100%; object-fit: cover;" draggable="false">
+                                </div>
+                            </div>
+                            <!-- Notch -->
+                            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-7 bg-gray-900 rounded-b-2xl z-10"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+                        <!-- Project Link Section -->
+            <section class="reveal">
+                <div class="bg-[#18181B] rounded-3xl p-8 md:p-12 shadow-xl border border-white/10">
+                    <h2 class="text-3xl font-bold mb-6 text-center text-white">项目线上</h2>
+                    <div class="max-w-2xl mx-auto">
+                        <div class="bg-gradient-to-br from-amber-900/30 to-orange-900/30 rounded-2xl p-8 mb-6 border border-amber-500/30">
+                            <div class="flex items-start gap-4">
+                                <div class="flex-shrink-0 w-12 h-12 bg-amber-600 rounded-xl flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                    </svg>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="text-lg font-semibold text-white mb-2">企业内部小程序</h3>
+                                    <p class="text-gray-400">此项目为企业内部使用的小程序，暂无网址查看</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+    
+    <!-- Footer -->
+    <footer class="py-8 px-6 border-t border-white/10">
+        <div class="max-w-7xl mx-auto text-center">
+            <p class="text-gray-400 text-sm">
+                © 2026 杨一楠。All rights reserved.
+            </p>
+        </div>
+    </footer>
+    
+    <!-- Copy Success Toast -->
+    <div class="fixed bottom-6 right-6 bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg transform translate-y-20 opacity-0 transition-all duration-300" id="copy-toast">
+        <div class="flex items-center">
+            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            <span>链接已复制到剪贴板！</span>
+        </div>
+    </div>
+    
+    <script>
+        // Scroll Reveal Animation
+        function reveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            reveals.forEach(element => {
+                const windowHeight = window.innerHeight;
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 100;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    element.classList.add('active');
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', reveal);
+        reveal(); // Initial check
+        
+        // Initialize
+        console.log('Project detail page loaded successfully!');
+    </script>
+</body>
+</html>

@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人创意探索 | 设计作品详情</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#ffffff',
+                        secondary: '#A1A1AA',
+                        cta: '#2563EB',
+                        background: '#0a0a0f',
+                        text: '#ffffff'
+                    },
+                    fontFamily: {
+                        archivo: ['Archivo', 'sans-serif'],
+                        'space-grotesk': ['Space Grotesk', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        * {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Archivo', sans-serif;
+            background-color: #0a0a0f;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+            padding: 40px 0;
+        }
+        
+        .image-card {
+            background: #18181B;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .image-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .image-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+        
+        /* Audio hover effect */
+        .audio-card .play-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .audio-card:hover .play-overlay {
+            opacity: 1;
+        }
+        
+        .play-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: pulse-play 1.5s infinite;
+        }
+        
+        @keyframes pulse-play {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+            }
+            50% {
+                transform: scale(1.1);
+                box-shadow: 0 0 0 15px rgba(255, 255, 255, 0);
+            }
+        }
+        
+        .play-icon svg {
+            width: 24px;
+            height: 24px;
+            color: #0a0a0f;
+            margin-left: 4px;
+        }
+        
+        .btn-primary {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        .copy-success {
+            animation: pulse 0.5s ease-in-out;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        /* iPhone Model Styles */
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .phone-model-wrapper {
+            transition: transform 0.3s ease;
+        }
+        
+        .phone-model-wrapper:hover {
+            transform: translateY(-5px);
+        }
+        
+        .screen-content {
+            cursor: grab;
+            user-select: none;
+        }
+        
+        .screen-content:active {
+            cursor: grabbing;
+        }
+        
+        .image-stack img {
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+        
+        /* Image Modal for Lightbox */
+        .image-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            cursor: zoom-out;
+        }
+        
+        .image-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .image-modal img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+        }
+        
+        .image-modal.active img {
+            transform: scale(1);
+        }
+        
+        .image-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            cursor: pointer;
+            z-index: 1001;
+            transition: transform 0.3s ease;
+            user-select: none;
+        }
+        
+        .image-modal-close:hover {
+            transform: scale(1.1);
+        }
+        
+        .phone-model-wrapper .screen-content img {
+            cursor: zoom-in;
+            transition: opacity 0.3s ease;
+        }
+        
+        .phone-model-wrapper .screen-content img:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Navigation -->
+    <nav class="fixed top-4 left-4 right-4 z-50 rounded-2xl px-6 py-4 flex justify-between items-center max-w-7xl mx-auto backdrop-blur-md bg-black/80 shadow-sm border border-white/10">
+        <a href="index.html" class="text-2xl font-bold font-space-grotesk text-white hover:text-cta transition-colors duration-200 cursor-pointer">
+            ← 返回首页
+        </a>
+        <a href="index.html#work" class="text-gray-400 hover:text-white transition-colors duration-200 cursor-pointer">
+            查看更多作品
+        </a>
+    </nav>
+    
+    <!-- Main Content -->
+    <main class="pt-32 pb-20 px-6">
+        <div class="max-w-6xl mx-auto">
+            <!-- Title Section -->
+            <div class="text-center mb-16 reveal">
+                <span class="inline-block bg-cta/10 text-cta px-4 py-2 rounded-full text-sm font-medium mb-4">个人创意实验</span>
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                    个人创意探索
+                </h1>
+                <p class="text-xl text-secondary max-w-3xl mx-auto leading-relaxed">
+                    无关需求，只为创作本身。探索视觉艺术的无限可能，融合平面设计、音频制作与声音艺术的个人实验项目。
+                </p>
+            </div>
+            
+            <!-- Visual Showcase Section - Part 1: 平面设计 -->
+            <section class="mb-20 reveal">
+                <h2 class="text-3xl font-bold mb-8 text-center">平面设计</h2>
+                <div class="image-grid">
+                    <div class="image-card">
+                        <img src="https://i.postimg.cc/VsK0crpX/zu-26711-1x.png" alt="平面设计作品 1">
+                    </div>
+                    <div class="image-card">
+                        <img src="https://i.postimg.cc/fTktWWhM/zu-26709-1x.png" alt="平面设计作品 2">
+                    </div>
+                    <div class="image-card">
+                        <img src="https://i.postimg.cc/CKDYmXTk/kuijiang3.png" alt="平面设计作品 3">
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Visual Showcase Section - Part 2: 音频制作 -->
+            <section class="mb-20 reveal">
+                <h2 class="text-3xl font-bold mb-8 text-center">音频制作</h2>
+                <div class="image-grid">
+                    <a href="https://music.163.com/song?id=3346093737&uct2=U2FsdGVkX19UPHaxBNKMCva28LJWWEvLiU8OmeOReZc=" target="_blank" class="image-card audio-card block">
+                        <img src="https://i.postimg.cc/85BKCBM8/yan-zhe-ni-de-lei-hen1204.png" alt="音频制作作品 1">
+                        <div class="play-overlay">
+                            <div class="play-icon">
+                                <svg fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M8 5v14l11-7z"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="https://music.163.com/song?id=2674848441&uct2=U2FsdGVkX18dJYcrL5nG1QgmYSHQYLT86kX034w+PkQ=" target="_blank" class="image-card audio-card block">
+                        <img src="https://i.postimg.cc/Y93R72BQ/d5001eefa18c141f86b2367322d6cb0.png" alt="音频制作作品 2">
+                        <div class="play-overlay">
+                            <div class="play-icon">
+                                <svg fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M8 5v14l11-7z"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="https://music.163.com/song?id=2668773142&uct2=U2FsdGVkX19imD1x75pa/iSaKjCvCnxUUlB5g5rJlcQ=" target="_blank" class="image-card audio-card block">
+                        <img src="https://i.postimg.cc/C5xNxywm/54e44d12c1b81f7009b39b5546d1dc7.png" alt="音频制作作品 3">
+                        <div class="play-overlay">
+                            <div class="play-icon">
+                                <svg fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M8 5v14l11-7z"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </section>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="py-8 px-6 border-t border-white/10">
+        <div class="max-w-7xl mx-auto text-center">
+            <p class="text-gray-400 text-sm">
+                © 2026 杨一楠。All rights reserved.
+            </p>
+        </div>
+    </footer>
+    
+    <!-- Image Modal for Lightbox -->
+    <div class="image-modal" id="image-modal">
+        <span class="image-modal-close" id="modal-close">&times;</span>
+        <img src="" alt="放大预览" id="modal-image">
+    </div>
+    
+    <script>
+        // Scroll Reveal Animation
+        function reveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            reveals.forEach(element => {
+                const windowHeight = window.innerHeight;
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 100;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    element.classList.add('active');
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', reveal);
+        reveal(); // Initial check
+        
+        // Image Modal / Lightbox Functionality
+        const imageModal = document.getElementById('image-modal');
+        const modalImage = document.getElementById('modal-image');
+        const modalClose = document.getElementById('modal-close');
+        
+        // Add click event to all image cards (excluding audio cards)
+        const imageCards = document.querySelectorAll('.image-card:not(.audio-card) img');
+        
+        imageCards.forEach(img => {
+            img.addEventListener('click', () => {
+                const imgSrc = img.src;
+                modalImage.src = imgSrc;
+                imageModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+        
+        // Close modal function
+        function closeModal() {
+            imageModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        // Close on close button click
+        if (modalClose) {
+            modalClose.addEventListener('click', closeModal);
+        }
+        
+        // Close on modal background click
+        imageModal.addEventListener('click', (e) => {
+            if (e.target === imageModal) {
+                closeModal();
+            }
+        });
+        
+        // Close on Escape key press
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && imageModal.classList.contains('active')) {
+                closeModal();
+            }
+        });
+        
+        // Initialize
+        console.log('Project detail page loaded successfully!');
+    </script>
+</body>
+</html>

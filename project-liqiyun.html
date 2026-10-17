@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>力企云 | 设计作品详情</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#ffffff',
+                        secondary: '#A1A1AA',
+                        cta: '#2563EB',
+                        background: '#0a0a0f',
+                        text: '#ffffff'
+                    },
+                    fontFamily: {
+                        archivo: ['Archivo', 'sans-serif'],
+                        'space-grotesk': ['Space Grotesk', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        * {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Archivo', sans-serif;
+            background-color: #0a0a0f;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .btn-primary {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        .copy-success {
+            animation: pulse 0.5s ease-in-out;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+            padding: 40px 0;
+        }
+        
+        .image-card {
+            background: #18181B;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.08);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .image-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .image-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .image-card img:hover {
+            transform: scale(1.02);
+        }
+        
+        /* Lightbox Modal */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .lightbox.active {
+            display: flex;
+            opacity: 1;
+        }
+        
+        .lightbox-img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+        }
+        
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 40px;
+            color: white;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            z-index: 1001;
+        }
+        
+        .lightbox-close:hover {
+            color: #2563EB;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Navigation -->
+    <nav class="fixed top-4 left-4 right-4 z-50 rounded-2xl px-6 py-4 flex justify-between items-center max-w-7xl mx-auto backdrop-blur-md bg-black/80 shadow-sm border border-white/10">
+        <a href="index.html" class="text-2xl font-bold font-space-grotesk text-white hover:text-cta transition-colors duration-200 cursor-pointer">
+            ← 返回首页
+        </a>
+        <a href="index.html#work" class="text-gray-400 hover:text-white transition-colors duration-200 cursor-pointer">
+            查看更多作品
+        </a>
+    </nav>
+    
+    <!-- Main Content -->
+    <main class="pt-32 pb-20 px-6">
+        <div class="max-w-6xl mx-auto">
+            <!-- Title Section -->
+            <div class="text-center mb-16 reveal">
+                <span class="inline-block bg-cta/10 text-cta px-4 py-2 rounded-full text-sm font-medium mb-4">一站式惠企数字化服务云平台</span>
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                    力企云
+                </h1>
+                <p class="text-xl text-secondary max-w-3xl mx-auto leading-relaxed">
+                    数字赋能企业，科技极简视觉，为企业设计风格化数字化服务平台。一站式惠企数字化服务云平台，实现企业智能精准匹配
+                </p>
+            </div>
+            
+            <!-- Visual Showcase Section -->
+            <section class="mb-20 reveal">
+                <h2 class="text-3xl font-bold mb-8 text-center">视觉精选</h2>
+                <div class="image-grid">
+                    <div class="image-card">
+                        <img src="https://i.postimg.cc/7Z5Wb92j/1.png" alt="力企云界面设计 1">
+                    </div>
+                    <div class="image-card">
+                        <img src="https://i.postimg.cc/K8CsTT7t/2.png" alt="力企云界面设计 2">
+                    </div>
+                    <div class="image-card">
+                        <img src="https://i.postimg.cc/pd8cJdqH/3.png" alt="力企云界面设计 3">
+                    </div>
+                    <div class="image-card">
+                        <img src="https://i.postimg.cc/gJWSSPTr/4.png" alt="力企云界面设计 4">
+                    </div>
+                    <div class="image-card">
+                        <img src="https://i.postimg.cc/hjByyq5r/5.png" alt="力企云界面设计 5">
+                    </div>
+                    <div class="image-card">
+                        <img src="https://i.postimg.cc/sX4nb0kL/6.png" alt="力企云界面设计 6">
+                    </div>
+                    <div class="image-card">
+                        <img src="https://i.postimg.cc/RhPgZJVM/7.png" alt="办公云界面设计 7">
+                    </div>
+                    <div class="image-card">
+                        <img src="https://i.postimg.cc/yYbfqRb2/8.png" alt="办公云界面设计 8">
+                    </div>
+                    <div class="image-card">
+                        <img src="https://i.postimg.cc/CLQvy82L/9.png" alt="办公云界面设计 9">
+                    </div>
+                    <div class="image-card">
+                        <img src="https://i.postimg.cc/254TBKSb/10.png" alt="办公云界面设计 10">
+                    </div>
+                    <div class="image-card">
+                        <img src="https://i.postimg.cc/d16B5ZCR/11.png" alt="办公云界面设计 11">
+                    </div>
+                    <div class="image-card">
+                        <img src="https://i.postimg.cc/NF0xSG7r/12.png" alt="办公云界面设计 12">
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Project Link Section -->
+            <section class="reveal">
+                <div class="bg-[#18181B] rounded-3xl p-8 md:p-12 shadow-xl border border-white/10">
+                    <h2 class="text-3xl font-bold mb-6 text-center text-white">项目线上</h2>
+                    <div class="max-w-2xl mx-auto">
+                        <div class="bg-[#27272A] rounded-2xl p-6 mb-6 border border-white/10">
+                            <p class="text-gray-400 mb-4">访问项目网址，了解更多详情：</p>
+                            <div class="flex flex-col sm:flex-row gap-4 items-center">
+                                <input type="text" value="https://www.liqiyun.com" id="project-url" readonly class="flex-1 w-full px-4 py-3 rounded-xl border border-white/20 bg-[#18181B] text-white font-mono text-sm focus:outline-none focus:ring-2 focus:ring-cta/50">
+                                <button class="btn-primary bg-cta text-white px-6 py-3 rounded-xl font-medium hover:bg-blue-600 transition-all duration-300 flex items-center gap-2 cursor-pointer" id="copy-btn">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                    </svg>
+                                    <span id="copy-text">复制链接</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <a href="https://www.liqicloud.com/" target="_blank" class="btn-primary inline-block bg-white text-black px-8 py-4 rounded-full font-medium hover:bg-gray-200 transition-all duration-300">
+                                立即访问项目 →
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="py-8 px-6 border-t border-white/10">
+        <div class="max-w-7xl mx-auto text-center">
+            <p class="text-gray-400 text-sm">
+                © 2026 杨一楠。All rights reserved.
+            </p>
+        </div>
+    </footer>
+    
+    <!-- Lightbox Modal -->
+    <div class="lightbox" id="lightbox">
+        <span class="lightbox-close">&times;</span>
+        <img src="" alt="放大预览" class="lightbox-img" id="lightbox-img">
+    </div>
+    
+    <!-- Copy Success Toast -->
+    <div class="fixed bottom-6 right-6 bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg transform translate-y-20 opacity-0 transition-all duration-300" id="copy-toast">
+        <div class="flex items-center">
+            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            <span>链接已复制到剪贴板！</span>
+        </div>
+    </div>
+    
+    <script>
+
+        // Scroll Reveal Animation
+        function reveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            reveals.forEach(element => {
+                const windowHeight = window.innerHeight;
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 100;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    element.classList.add('active');
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', reveal);
+        reveal(); // Initial check
+        
+        // Lightbox Functionality
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxClose = document.querySelector('.lightbox-close');
+        const imageCards = document.querySelectorAll('.image-card img');
+        
+        imageCards.forEach(img => {
+            img.addEventListener('click', () => {
+                lightboxImg.src = img.src;
+                lightbox.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+        
+        lightboxClose.addEventListener('click', () => {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+        
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+        
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+        
+        // Copy Link Functionality
+        const copyBtn = document.getElementById('copy-btn');
+        const copyText = document.getElementById('copy-text');
+        const projectUrl = document.getElementById('project-url');
+        const copyToast = document.getElementById('copy-toast');
+        
+        copyBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(projectUrl.value).then(() => {
+                // Show success state
+                copyBtn.classList.add('copy-success');
+                copyText.textContent = '已复制！';
+                
+                // Show toast
+                copyToast.classList.remove('translate-y-20', 'opacity-0');
+                
+                setTimeout(() => {
+                    copyBtn.classList.remove('copy-success');
+                    copyText.textContent = '复制链接';
+                    copyToast.classList.add('translate-y-20', 'opacity-0');
+                }, 2000);
+            }).catch(err => {
+                console.error('复制失败:', err);
+                copyText.textContent = '复制失败';
+                setTimeout(() => {
+                    copyText.textContent = '复制链接';
+                }, 2000);
+            });
+        });
+        
+        console.log('Project detail page loaded successfully!');
+    </script>
+</body>
+</html>

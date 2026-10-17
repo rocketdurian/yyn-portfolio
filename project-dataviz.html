@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>力企云/力企云SaaS小程序风格设计 | 设计作品详情</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#ffffff',
+                        secondary: '#A1A1AA',
+                        cta: '#2563EB',
+                        background: '#0a0a0f',
+                        text: '#ffffff'
+                    },
+                    fontFamily: {
+                        archivo: ['Archivo', 'sans-serif'],
+                        'space-grotesk': ['Space Grotesk', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        * {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Archivo', sans-serif;
+            background-color: #0a0a0f;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .image-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .image-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+        }
+        
+        .btn-primary {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        .copy-success {
+            animation: pulse 0.5s ease-in-out;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        /* iPhone Model Styles */
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .phone-model-wrapper {
+            transition: transform 0.3s ease;
+        }
+        
+        .phone-model-wrapper:hover {
+            transform: translateY(-5px);
+        }
+        
+        .screen-content {
+            cursor: grab;
+            user-select: none;
+        }
+        
+        .screen-content:active {
+            cursor: grabbing;
+        }
+        
+        /* 图片切片优化 - 解决高度过高导致的模糊问题 */
+        .image-stack img {
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+        
+        /* 图片放大查看功能样式 */
+        .image-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            cursor: zoom-out;
+        }
+        
+        .image-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .image-modal img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+        }
+        
+        .image-modal.active img {
+            transform: scale(1);
+        }
+        
+        .image-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            cursor: pointer;
+            z-index: 1001;
+            transition: transform 0.3s ease;
+            user-select: none;
+        }
+        
+        .image-modal-close:hover {
+            transform: scale(1.1);
+        }
+        
+        .phone-model-wrapper .screen-content img {
+            cursor: zoom-in;
+            transition: opacity 0.3s ease;
+        }
+        
+        .phone-model-wrapper .screen-content img:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Navigation -->
+    <nav class="fixed top-4 left-4 right-4 z-50 rounded-2xl px-6 py-4 flex justify-between items-center max-w-7xl mx-auto backdrop-blur-md bg-black/80 shadow-sm border border-white/10">
+        <a href="index.html" class="text-2xl font-bold font-space-grotesk text-white hover:text-cta transition-colors duration-200 cursor-pointer">
+            ← 返回首页
+        </a>
+        <a href="index.html#work" class="text-gray-400 hover:text-white transition-colors duration-200 cursor-pointer">
+            查看更多作品
+        </a>
+    </nav>
+    
+    <!-- Main Content -->
+    <main class="pt-32 pb-20 px-6">
+        <div class="max-w-6xl mx-auto">
+            <!-- Title Section -->
+            <div class="text-center mb-16 reveal">
+                <span class="inline-block bg-cta/10 text-cta px-4 py-2 rounded-full text-sm font-medium mb-4">数据可视化产品</span>
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                    力企云/力企云SaaS小程序风格设计
+                </h1>
+                <p class="text-xl text-secondary max-w-3xl mx-auto leading-relaxed">
+                    一站式惠企政策查询申报服务平台，面向B端政策申报小程序与SaaS版本
+                </p>
+            </div>
+            
+            <!-- Visual Showcase Section -->
+            <section class="mb-20 reveal">
+                <h2 class="text-3xl font-bold mb-8 text-center">视觉精选</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center">
+                    <!-- Phone Model 1 -->
+                    <div class="phone-model-wrapper relative">
+                        <div class="iphone-frame relative mx-auto" style="width: 375px; height: 812px;">
+                            <div class="phone-screen overflow-hidden rounded-[40px] border-8 border-gray-900 shadow-2xl bg-black" style="height: 100%;">
+                                <div class="screen-content overflow-y-auto scrollbar-hide" style="height: 100%;" data-phone-scroll="1">
+                                    <div class="image-stack w-full">
+                                        <img src="https://i.postimg.cc/8cz6NGpt/1.png" alt="设计作品 1-上" class="w-full" style="min-height: 100%; object-fit: cover;" draggable="false">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Notch -->
+                            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-7 bg-gray-900 rounded-b-2xl z-10"></div>
+                        </div>
+                    </div>
+                    <!-- Phone Model 2 -->
+                    <div class="phone-model-wrapper relative">
+                        <div class="iphone-frame relative mx-auto" style="width: 375px; height: 812px;">
+                            <div class="phone-screen overflow-hidden rounded-[40px] border-8 border-gray-900 shadow-2xl bg-black" style="height: 100%;">
+                                <div class="screen-content overflow-y-auto scrollbar-hide" style="height: 100%;" data-phone-scroll="2">
+                                    <img src="https://s41.ax1x.com/2026/07/18/pmyT0xg.png" alt="设计作品 2" class="w-full" style="min-height: 100%; object-fit: cover;" draggable="false">
+                                </div>
+                            </div>
+                            <!-- Notch -->
+                            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-7 bg-gray-900 rounded-b-2xl z-10"></div>
+                        </div>
+                    </div>
+                    <!-- Phone Model 3 -->
+                    <div class="phone-model-wrapper relative">
+                        <div class="iphone-frame relative mx-auto" style="width: 375px; height: 812px;">
+                            <div class="phone-screen overflow-hidden rounded-[40px] border-8 border-gray-900 shadow-2xl bg-black" style="height: 100%;">
+                                <div class="screen-content overflow-y-auto scrollbar-hide" style="height: 100%;" data-phone-scroll="3">
+                                    <img src="https://s41.ax1x.com/2026/07/10/pmrXh79.png" alt="设计作品 3" class="w-full" style="min-height: 100%; object-fit: cover;" draggable="false">
+                                </div>
+                            </div>
+                            <!-- Notch -->
+                            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-7 bg-gray-900 rounded-b-2xl z-10"></div>
+                        </div>
+                    </div>
+                    <!-- Phone Model 4 -->
+                    <div class="phone-model-wrapper relative">
+                        <div class="iphone-frame relative mx-auto" style="width: 375px; height: 812px;">
+                            <div class="phone-screen overflow-hidden rounded-[40px] border-8 border-gray-900 shadow-2xl bg-black" style="height: 100%;">
+                                <div class="screen-content overflow-y-auto scrollbar-hide" style="height: 100%;" data-phone-scroll="4">
+                                    <img src="https://s41.ax1x.com/2026/07/10/pmrX5kR.png" alt="设计作品 4" class="w-full" style="min-height: 100%; object-fit: cover;" draggable="false">
+                                </div>
+                            </div>
+                            <!-- Notch -->
+                            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-7 bg-gray-900 rounded-b-2xl z-10"></div>
+                        </div>
+                    </div>
+                    <!-- Phone Model 5 -->
+                    <div class="phone-model-wrapper relative">
+                        <div class="iphone-frame relative mx-auto" style="width: 375px; height: 812px;">
+                            <div class="phone-screen overflow-hidden rounded-[40px] border-8 border-gray-900 shadow-2xl bg-black" style="height: 100%;">
+                                <div class="screen-content overflow-y-auto scrollbar-hide" style="height: 100%;" data-phone-scroll="5">
+                                    <img src="https://s41.ax1x.com/2026/07/10/pmrXH1K.png" alt="设计作品 5" class="w-full" style="min-height: 100%; object-fit: cover;" draggable="false">
+                                </div>
+                            </div>
+                            <!-- Notch -->
+                            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-7 bg-gray-900 rounded-b-2xl z-10"></div>
+                        </div>
+                    </div>
+                    <!-- Phone Model 6 -->
+                    <div class="phone-model-wrapper relative">
+                        <div class="iphone-frame relative mx-auto" style="width: 375px; height: 812px;">
+                            <div class="phone-screen overflow-hidden rounded-[40px] border-8 border-gray-900 shadow-2xl bg-black" style="height: 100%;">
+                                <div class="screen-content overflow-y-auto scrollbar-hide" style="height: 100%;" data-phone-scroll="6">
+                                    <img src="https://s41.ax1x.com/2026/07/10/pmrXqXD.png" alt="设计作品 6" class="w-full" style="min-height: 100%; object-fit: cover;" draggable="false">
+                                </div>
+                            </div>
+                            <!-- Notch -->
+                            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-7 bg-gray-900 rounded-b-2xl z-10"></div>
+                        </div>
+                    </div>
+                    <!-- Phone Model 7 -->
+                    <div class="phone-model-wrapper relative">
+                        <div class="iphone-frame relative mx-auto" style="width: 375px; height: 812px;">
+                            <div class="phone-screen overflow-hidden rounded-[40px] border-8 border-gray-900 shadow-2xl bg-black" style="height: 100%;">
+                                <div class="screen-content overflow-y-auto scrollbar-hide" style="height: 100%;" data-phone-scroll="7">
+                                    <img src="https://s41.ax1x.com/2026/07/10/pmrXOne.png" alt="设计作品 7" class="w-full" style="min-height: 100%; object-fit: cover;" draggable="false">
+                                </div>
+                            </div>
+                            <!-- Notch -->
+                            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-7 bg-gray-900 rounded-b-2xl z-10"></div>
+                        </div>
+                    </div>
+                    <!-- Phone Model 8 -->
+                    <div class="phone-model-wrapper relative">
+                        <div class="iphone-frame relative mx-auto" style="width: 375px; height: 812px;">
+                            <div class="phone-screen overflow-hidden rounded-[40px] border-8 border-gray-900 shadow-2xl bg-black" style="height: 100%;">
+                                <div class="screen-content overflow-y-auto scrollbar-hide" style="height: 100%;" data-phone-scroll="8">
+                                    <img src="https://s41.ax1x.com/2026/07/10/pmrXj7d.png" alt="设计作品 8" class="w-full" style="min-height: 100%; object-fit: cover;" draggable="false">
+                                </div>
+                            </div>
+                            <!-- Notch -->
+                            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-7 bg-gray-900 rounded-b-2xl z-10"></div>
+                        </div>
+                    </div>
+                    <!-- Phone Model 9 -->
+                    <div class="phone-model-wrapper relative">
+                        <div class="iphone-frame relative mx-auto" style="width: 375px; height: 812px;">
+                            <div class="phone-screen overflow-hidden rounded-[40px] border-8 border-gray-900 shadow-2xl bg-black" style="height: 100%;">
+                                <div class="screen-content overflow-y-auto scrollbar-hide" style="height: 100%;" data-phone-scroll="9">
+                                    <img src="https://s41.ax1x.com/2026/07/11/pmsrJeJ.png" alt="设计作品 9" class="w-full" style="min-height: 100%; object-fit: cover;" draggable="false">
+                                </div>
+                            </div>
+                            <!-- Notch -->
+                            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-7 bg-gray-900 rounded-b-2xl z-10"></div>
+                        </div>
+                    </div>
+                    <!-- Phone Model 10 -->
+                    <div class="phone-model-wrapper relative">
+                        <div class="iphone-frame relative mx-auto" style="width: 375px; height: 812px;">
+                            <div class="phone-screen overflow-hidden rounded-[40px] border-8 border-gray-900 shadow-2xl bg-black" style="height: 100%;">
+                                <div class="screen-content overflow-y-auto scrollbar-hide" style="height: 100%;" data-phone-scroll="10">
+                                    <img src="https://s41.ax1x.com/2026/07/11/pmsrUF1.png" alt="设计作品 10" class="w-full" style="min-height: 100%; object-fit: cover;" draggable="false">
+                                </div>
+                            </div>
+                            <!-- Notch -->
+                            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-7 bg-gray-900 rounded-b-2xl z-10"></div>
+                        </div>
+                    </div>
+                    <!-- Phone Model 11 -->
+                    <div class="phone-model-wrapper relative">
+                        <div class="iphone-frame relative mx-auto" style="width: 375px; height: 812px;">
+                            <div class="phone-screen overflow-hidden rounded-[40px] border-8 border-gray-900 shadow-2xl bg-black" style="height: 100%;">
+                                <div class="screen-content overflow-y-auto scrollbar-hide" style="height: 100%;" data-phone-scroll="11">
+                                    <img src="https://s41.ax1x.com/2026/07/11/pmsraJx.png" alt="设计作品 11" class="w-full" style="min-height: 100%; object-fit: cover;" draggable="false">
+                                </div>
+                            </div>
+                            <!-- Notch -->
+                            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-7 bg-gray-900 rounded-b-2xl z-10"></div>
+                        </div>
+                    </div>
+                    <!-- Phone Model 12 -->
+                    <div class="phone-model-wrapper relative">
+                        <div class="iphone-frame relative mx-auto" style="width: 375px; height: 812px;">
+                            <div class="phone-screen overflow-hidden rounded-[40px] border-8 border-gray-900 shadow-2xl bg-black" style="height: 100%;">
+                                <div class="screen-content overflow-y-auto scrollbar-hide" style="height: 100%;" data-phone-scroll="12">
+                                    <img src="https://s41.ax1x.com/2026/07/11/pmsrBQO.png" alt="设计作品 12" class="w-full" style="min-height: 100%; object-fit: cover;" draggable="false">
+                                </div>
+                            </div>
+                            <!-- Notch -->
+                            <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-7 bg-gray-900 rounded-b-2xl z-10"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+                        <!-- Project Link Section -->
+            <section class="reveal">
+                <div class="bg-[#18181B] rounded-3xl p-8 md:p-12 shadow-xl border border-white/10">
+                    <h2 class="text-3xl font-bold mb-6 text-center text-white">项目线上</h2>
+                    <div class="max-w-2xl mx-auto">
+                        <div class="bg-gradient-to-br from-green-900/30 to-emerald-900/30 rounded-2xl p-8 mb-6 border border-green-500/30">
+                            <div class="flex items-start gap-4 mb-6">
+                                <div class="flex-shrink-0 w-12 h-12 bg-green-600 rounded-xl flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.139-.065.21-.066.275-.132.565-.132.792 0 .82.696 1.485 1.553 1.485.479 0 .937-.198 1.304-.467l1.455-1.063a.564.564 0 0 1 .657-.036A9.28 9.28 0 0 0 8.691 18c4.8 0 8.691-3.287 8.691-7.342 0-4.054-3.891-8.47-8.691-8.47zM7.454 14.645a.877.877 0 0 0-.87.879c0 .485.394.879.879.879a.879.879 0 0 0 .879-.879.879.879 0 0 0-.879-.879zm3.237-5.286a.877.877 0 0 0-.879.879c0 .485.394.879.879.879a.879.879 0 0 0 .879-.879.879.879 0 0 0-.879-.879z"/>
+                                    </svg>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="text-lg font-semibold text-white mb-2">微信小程序</h3>
+                                    <p class="text-gray-400 mb-4">请在微信中搜索小程序</p>
+                                    <div class="flex flex-col sm:flex-row gap-3 items-center">
+                                        <div class="flex-1 w-full px-4 py-3 bg-[#0a0a0f] rounded-xl border-2 border-green-600/50 text-center">
+                                            <span class="text-xl font-bold text-green-400 tracking-wide">力企云 SaaS</span>
+                                        </div>
+                                        <button class="btn-primary bg-green-600 text-white px-6 py-3 rounded-xl font-medium hover:bg-green-700 transition-all duration-300 flex items-center gap-2 cursor-pointer" id="copy-miniprogram-btn">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                            </svg>
+                                            <span id="copy-miniprogram-text">复制名称</span>
+                                        </button>
+                                    </div>
+                                    <p class="text-xs text-gray-500 mt-4">打开微信 → 发现 → 小程序 → 搜索"力企云 SaaS"</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+    
+    <!-- Footer -->
+    <footer class="py-8 px-6 border-t border-white/10">
+        <div class="max-w-7xl mx-auto text-center">
+            <p class="text-gray-400 text-sm">
+                © 2026 杨一楠。All rights reserved.
+            </p>
+        </div>
+    </footer>
+    
+    <!-- Image Modal for Lightbox -->
+    <div class="image-modal" id="image-modal">
+        <span class="image-modal-close" id="modal-close">&times;</span>
+        <img src="" alt="放大预览" id="modal-image">
+    </div>
+    
+    <!-- Copy Success Toast -->
+    <div class="fixed bottom-6 right-6 bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg transform translate-y-20 opacity-0 transition-all duration-300" id="copy-toast">
+        <div class="flex items-center">
+            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            <span>链接已复制到剪贴板！</span>
+        </div>
+    </div>
+    
+    <script>
+        // Scroll Reveal Animation
+        function reveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            reveals.forEach(element => {
+                const windowHeight = window.innerHeight;
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 100;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    element.classList.add('active');
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', reveal);
+        reveal(); // Initial check
+        
+        // Copy MiniProgram Name Functionality
+        const copyMiniProgramBtn = document.getElementById('copy-miniprogram-btn');
+        const copyMiniProgramText = document.getElementById('copy-miniprogram-text');
+        const copyToast = document.getElementById('copy-toast');
+        
+        if (copyMiniProgramBtn) {
+            copyMiniProgramBtn.addEventListener('click', () => {
+                navigator.clipboard.writeText('力企云 SaaS').then(() => {
+                    // Show success state
+                    copyMiniProgramBtn.classList.add('copy-success');
+                    copyMiniProgramText.textContent = '已复制！';
+                    
+                    // Show toast
+                    copyToast.classList.remove('translate-y-20', 'opacity-0');
+                    
+                    setTimeout(() => {
+                        copyMiniProgramBtn.classList.remove('copy-success');
+                        copyMiniProgramText.textContent = '复制名称';
+                        copyToast.classList.add('translate-y-20', 'opacity-0');
+                    }, 2000);
+                }).catch(err => {
+                    console.error('复制失败:', err);
+                    copyMiniProgramText.textContent = '复制失败';
+                    setTimeout(() => {
+                        copyMiniProgramText.textContent = '复制名称';
+                    }, 2000);
+                });
+            });
+        }
+        
+        // Phone Screen Drag to Scroll Functionality
+        const screenContents = document.querySelectorAll('.screen-content');
+        
+        screenContents.forEach(content => {
+            let isDragging = false;
+            let startY = 0;
+            let scrollTop = 0;
+            
+            // Mouse events
+            content.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                startY = e.clientY - scrollTop;
+                content.style.cursor = 'grabbing';
+                e.preventDefault();
+            });
+            
+            content.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                scrollTop = e.clientY - startY;
+                content.scrollTop = scrollTop;
+                e.preventDefault();
+            });
+            
+            content.addEventListener('mouseup', () => {
+                isDragging = false;
+                content.style.cursor = 'grab';
+            });
+            
+            content.addEventListener('mouseleave', () => {
+                isDragging = false;
+                content.style.cursor = 'grab';
+            });
+            
+            // Touch events for mobile
+            content.addEventListener('touchstart', (e) => {
+                isDragging = true;
+                startY = e.touches[0].clientY - scrollTop;
+                e.preventDefault();
+            }, { passive: false });
+            
+            content.addEventListener('touchmove', (e) => {
+                if (!isDragging) return;
+                scrollTop = e.touches[0].clientY - startY;
+                content.scrollTop = scrollTop;
+                e.preventDefault();
+            }, { passive: false });
+            
+            content.addEventListener('touchend', () => {
+                isDragging = false;
+            });
+        });
+        
+        // Image Modal / Lightbox Functionality
+        const imageModal = document.getElementById('image-modal');
+        const modalImage = document.getElementById('modal-image');
+        const modalClose = document.getElementById('modal-close');
+        
+        // Add click event to all phone screen images
+        const phoneImages = document.querySelectorAll('.phone-model-wrapper .screen-content img');
+        
+        phoneImages.forEach(img => {
+            img.addEventListener('click', () => {
+                const imgSrc = img.src;
+                modalImage.src = imgSrc;
+                imageModal.classList.add('active');
+                document.body.style.overflow = 'hidden'; // Prevent body scroll
+            });
+        });
+        
+        // Close modal function
+        function closeModal() {
+            imageModal.classList.remove('active');
+            document.body.style.overflow = ''; // Restore body scroll
+        }
+        
+        // Close on close button click
+        if (modalClose) {
+            modalClose.addEventListener('click', closeModal);
+        }
+        
+        // Close on modal background click
+        imageModal.addEventListener('click', (e) => {
+            if (e.target === imageModal) {
+                closeModal();
+            }
+        });
+        
+        // Close on Escape key press
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && imageModal.classList.contains('active')) {
+                closeModal();
+            }
+        });
+        
+        // Initialize
+        console.log('Project detail page loaded successfully!');
+    </script>
+</body>
+</html>

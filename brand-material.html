@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>品牌物料展示 | 启程智远集团官网</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0a0a0f',
+                        secondary: '#1a1a2e',
+                        cta: '#ffffff',
+                        ctaHover: '#e0e0e0',
+                        accent: '#7b2cbf',
+                        background: '#050508',
+                        text: '#ffffff'
+                    },
+                    fontFamily: {
+                        archivo: ['Archivo', 'sans-serif'],
+                        'space-grotesk': ['Space Grotesk', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        * {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Archivo', sans-serif;
+            background-color: #050508;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .image-card {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+        
+        .image-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+        }
+        
+        .image-label {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            backdrop-filter: blur(4px);
+            z-index: 10;
+        }
+        
+        /* 图片容器样式 */
+        .image-wrapper {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .image-wrapper img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 8px;
+        }
+        
+        /* Lightbox 样式 */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .lightbox.active {
+            display: flex;
+        }
+        
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+        
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 40px;
+            color: white;
+            cursor: pointer;
+            z-index: 1001;
+        }
+        
+        .lightbox-close:hover {
+            color: #ccc;
+        }
+        
+        .btn-primary {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Navigation -->
+    <nav class="fixed top-4 left-4 right-4 z-50 rounded-2xl px-6 py-4 flex justify-between items-center max-w-7xl mx-auto backdrop-blur-md bg-background/80 border border-white/10 shadow-sm">
+        <a href="project-official.html" class="text-2xl font-bold font-space-grotesk text-white hover:text-cta transition-colors duration-200 cursor-pointer">
+            ← 返回上一页
+        </a>
+        <a href="index.html" class="text-gray-400 hover:text-white transition-colors duration-200 cursor-pointer">
+            返回首页
+        </a>
+    </nav>
+    
+    <!-- Main Content -->
+    <main class="pt-32 pb-20 px-6">
+        <div class="max-w-6xl mx-auto">
+            <!-- Title Section -->
+            <div class="text-center mb-16 reveal">
+                <span class="inline-block bg-white/10 text-white px-4 py-2 rounded-full text-sm font-medium mb-4">品牌物料展示</span>
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-white">
+                    公司品牌物料展示
+                </h1>
+                <p class="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
+                    精选平面设计物料与科技风格演示文稿
+                </p>
+            </div>
+            
+            <!-- Gallery Section 1: 平面物料展示 - 第 1 组 (图片 1-6) -->
+            <section class="mb-12 reveal">
+                <h2 class="text-3xl font-bold mb-8 text-center text-white">公司设计平面物料展示</h2>
+                
+                <!-- 第 1 组：图片 1-6 (1125x2436) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                    <div class="image-card" onclick="openLightbox('https://i.postimg.cc/QNgJT9Q3/1.png')">
+                        <div class="image-label">1</div>
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/QNgJT9Q3/1.png" alt="平面物料 1" loading="lazy">
+                        </div>
+                    </div>
+                    
+                    <div class="image-card" onclick="openLightbox('https://i.postimg.cc/fR19FD7D/2.png')">
+                        <div class="image-label">2</div>
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/fR19FD7D/2.png" alt="平面物料 2" loading="lazy">
+                        </div>
+                    </div>
+                    
+                    <div class="image-card" onclick="openLightbox('https://i.postimg.cc/pXT5Lpqx/3.png')">
+                        <div class="image-label">3</div>
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/pXT5Lpqx/3.png" alt="平面物料 3" loading="lazy">
+                        </div>
+                    </div>
+                    
+                    <div class="image-card" onclick="openLightbox('https://i.postimg.cc/LXDhHpPH/4.png')">
+                        <div class="image-label">4</div>
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/LXDhHpPH/4.png" alt="平面物料 4" loading="lazy">
+                        </div>
+                    </div>
+                    
+                    <div class="image-card" onclick="openLightbox('https://i.postimg.cc/Nf5LwZjB/5.png')">
+                        <div class="image-label">5</div>
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/Nf5LwZjB/5.png" alt="平面物料 5" loading="lazy">
+                        </div>
+                    </div>
+                    
+                    <div class="image-card" onclick="openLightbox('https://i.postimg.cc/nLYhkJ09/6.png')">
+                        <div class="image-label">6</div>
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/nLYhkJ09/6.png" alt="平面物料 6" loading="lazy">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 第 2 组：图片 7-10 (1000x1500) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                    <div class="image-card" onclick="openLightbox('https://i.postimg.cc/rmVFZPPB/7.png')">
+                        <div class="image-label">7</div>
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/rmVFZPPB/7.png" alt="平面物料 7" loading="lazy">
+                        </div>
+                    </div>
+                    
+                    <div class="image-card" onclick="openLightbox('https://i.postimg.cc/brMyJNwv/8.png')">
+                        <div class="image-label">8</div>
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/brMyJNwv/8.png" alt="平面物料 8" loading="lazy">
+                        </div>
+                    </div>
+                    
+                    <div class="image-card" onclick="openLightbox('https://i.postimg.cc/2jX8TT7C/9.png')">
+                        <div class="image-label">9</div>
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/2jX8TT7C/9.png" alt="平面物料 9" loading="lazy">
+                        </div>
+                    </div>
+                    
+                    <div class="image-card" onclick="openLightbox('https://i.postimg.cc/m2vZWDnj/10.png')">
+                        <div class="image-label">10</div>
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/m2vZWDnj/10.png" alt="平面物料 10" loading="lazy">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 第 3 组：图片 11-14 (1920x1080) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
+                    <div class="image-card" onclick="openLightbox('https://i.postimg.cc/xCpYxTHz/11.png')">
+                        <div class="image-label">11</div>
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/xCpYxTHz/11.png" alt="平面物料 11" loading="lazy">
+                        </div>
+                    </div>
+                    
+                    <div class="image-card" onclick="openLightbox('https://i.postimg.cc/brKPPC3W/12.png')">
+                        <div class="image-label">12</div>
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/brKPPC3W/12.png" alt="平面物料 12" loading="lazy">
+                        </div>
+                    </div>
+                    
+                    <div class="image-card" onclick="openLightbox('https://i.postimg.cc/BZy42bJQ/13.png')">
+                        <div class="image-label">13</div>
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/BZy42bJQ/13.png" alt="平面物料 13" loading="lazy">
+                        </div>
+                    </div>
+                    
+                    <div class="image-card" onclick="openLightbox('https://i.postimg.cc/XY6WDPZg/14.png')">
+                        <div class="image-label">14</div>
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/XY6WDPZg/14.png" alt="平面物料 14" loading="lazy">
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Gallery Section 2: PPT 展示 (18 张图片，每排 3 个) -->
+            <section class="reveal">
+                <h2 class="text-3xl font-bold mb-8 text-center text-white">公司科技风格 ppt 展示</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- 图片 15-20 -->
+                    <div class="image-card" onclick="openLightbox('https://i.postimg.cc/yNcChyYs/15.png')">
+                        <div class="image-label">1</div>
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/yNcChyYs/15.png" alt="PPT 15" loading="lazy">
+                        </div>
+                    </div>
+                    
+                    <div class="image-card" onclick="openLightbox('https://i.postimg.cc/BQVrdVXN/16.png')">
+                        <div class="image-label">2</div>
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/BQVrdVXN/16.png" alt="PPT 16" loading="lazy">
+                        </div>
+                    </div>
+                    
+                    <div class="image-card" onclick="openLightbox('https://i.postimg.cc/0NgLNKGT/17.png')">
+                        <div class="image-label">3</div>
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/0NgLNKGT/17.png" alt="PPT 17" loading="lazy">
+                        </div>
+                    </div>
+                    
+                    <div class="image-card" onclick="openLightbox('https://i.postimg.cc/gkn5qHNt/18.png')">
+                        <div class="image-label">4</div>
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/gkn5qHNt/18.png" alt="PPT 18" loading="lazy">
+                        </div>
+                    </div>
+                    
+                    <div class="image-card" onclick="openLightbox('https://i.postimg.cc/N0wztqBw/19.png')">
+                        <div class="image-label">5</div>
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/N0wztqBw/19.png" alt="PPT 19" loading="lazy">
+                        </div>
+                    </div>
+                    
+                    <div class="image-card" onclick="openLightbox('https://i.postimg.cc/90SLNsJT/20.png')">
+                        <div class="image-label">6</div>
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/90SLNsJT/20.png" alt="PPT 20" loading="lazy">
+                        </div>
+                    </div>
+                    
+                    <!-- 图片 21-26 -->
+                    <div class="image-card" onclick="openLightbox('https://i.postimg.cc/R09X87LC/21.png')">
+                        <div class="image-label">7</div>
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/R09X87LC/21.png" alt="PPT 21" loading="lazy">
+                        </div>
+                    </div>
+                    
+                    <div class="image-card" onclick="openLightbox('https://i.postimg.cc/nrsk70pC/22.png')">
+                        <div class="image-label">8</div>
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/nrsk70pC/22.png" alt="PPT 22" loading="lazy">
+                        </div>
+                    </div>
+                    
+                    <div class="image-card" onclick="openLightbox('https://i.postimg.cc/nhfkj45z/23.png')">
+                        <div class="image-label">9</div>
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/nhfkj45z/23.png" alt="PPT 23" loading="lazy">
+                        </div>
+                    </div>
+                    
+                    <div class="image-card" onclick="openLightbox('https://i.postimg.cc/7hT3bhn1/24.png')">
+                        <div class="image-label">10</div>
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/7hT3bhn1/24.png" alt="PPT 24" loading="lazy">
+                        </div>
+                    </div>
+                    
+                    <div class="image-card" onclick="openLightbox('https://i.postimg.cc/3rDfkxR6/25.png')">
+                        <div class="image-label">11</div>
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/3rDfkxR6/25.png" alt="PPT 25" loading="lazy">
+                        </div>
+                    </div>
+                    
+                    <div class="image-card" onclick="openLightbox('https://i.postimg.cc/B6PpPmqX/26.png')">
+                        <div class="image-label">12</div>
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/B6PpPmqX/26.png" alt="PPT 26" loading="lazy">
+                        </div>
+                    </div>
+                    
+                    <!-- 图片 27-32 -->
+                    <div class="image-card" onclick="openLightbox('https://i.postimg.cc/W19w9Bzk/27.png')">
+                        <div class="image-label">13</div>
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/W19w9Bzk/27.png" alt="PPT 27" loading="lazy">
+                        </div>
+                    </div>
+                    
+                    <div class="image-card" onclick="openLightbox('https://i.postimg.cc/T2rq8LhR/28.png')">
+                        <div class="image-label">14</div>
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/T2rq8LhR/28.png" alt="PPT 28" loading="lazy">
+                        </div>
+                    </div>
+                    
+                    <div class="image-card" onclick="openLightbox('https://i.postimg.cc/pTK8t4WB/29.png')">
+                        <div class="image-label">15</div>
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/pTK8t4WB/29.png" alt="PPT 29" loading="lazy">
+                        </div>
+                    </div>
+                    
+                    <div class="image-card" onclick="openLightbox('https://i.postimg.cc/MK9BxywT/30.png')">
+                        <div class="image-label">16</div>
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/MK9BxywT/30.png" alt="PPT 30" loading="lazy">
+                        </div>
+                    </div>
+                    
+                    <div class="image-card" onclick="openLightbox('https://i.postimg.cc/qRctFKQr/31.png')">
+                        <div class="image-label">17</div>
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/qRctFKQr/31.png" alt="PPT 31" loading="lazy">
+                        </div>
+                    </div>
+                    
+                    <div class="image-card" onclick="openLightbox('https://i.postimg.cc/tC41rYxF/32.png')">
+                        <div class="image-label">18</div>
+                        <div class="image-wrapper">
+                            <img src="https://i.postimg.cc/tC41rYxF/32.png" alt="PPT 32" loading="lazy">
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Back to Category -->
+            <div class="text-center mt-16 reveal">
+                <a href="project-official.html" class="btn-primary inline-block bg-primary text-white px-8 py-4 rounded-full font-medium hover:bg-secondary transition-all duration-300">
+                    ← 返回作品分类
+                </a>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="py-8 px-6 border-t border-white/10">
+        <div class="max-w-7xl mx-auto text-center">
+            <p class="text-gray-400 text-sm">
+                © 2026 杨一楠。All rights reserved.
+            </p>
+        </div>
+    </footer>
+    
+    <!-- Lightbox Modal -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+        <span class="lightbox-close">&times;</span>
+        <img id="lightbox-img" src="" alt="放大预览">
+    </div>
+    
+    <script>
+        // Scroll Reveal Animation
+        function reveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            reveals.forEach(element => {
+                const windowHeight = window.innerHeight;
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 100;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    element.classList.add('active');
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', reveal);
+        reveal(); // Initial check
+        
+        // Lightbox 功能
+        function openLightbox(imageSrc) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            lightboxImg.src = imageSrc;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeLightbox(event) {
+            if (event.target.id === 'lightbox' || event.target.classList.contains('lightbox-close')) {
+                const lightbox = document.getElementById('lightbox');
+                lightbox.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+        
+        // ESC 键关闭
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const lightbox = document.getElementById('lightbox');
+                lightbox.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+        
+        console.log('Brand Material page loaded successfully!');
+    </script>
+</body>
+</html>

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智飞部 CRM 系统 | 设计作品详情</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#ffffff',
+                        secondary: '#A1A1AA',
+                        cta: '#2563EB',
+                        background: '#0a0a0f',
+                        text: '#ffffff'
+                    },
+                    fontFamily: {
+                        archivo: ['Archivo', 'sans-serif'],
+                        'space-grotesk': ['Space Grotesk', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        * {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Archivo', sans-serif;
+            background-color: #0a0a0f;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .image-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .image-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(255, 255, 255, 0.15);
+        }
+        
+        .btn-primary {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        .copy-success {
+            animation: pulse 0.5s ease-in-out;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .image-card img {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .image-card img:hover {
+            transform: scale(1.02);
+        }
+        
+        /* Lightbox Modal */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .lightbox.active {
+            display: flex;
+            opacity: 1;
+        }
+        
+        .lightbox-img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+        }
+        
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 40px;
+            color: white;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            z-index: 1001;
+        }
+        
+        .lightbox-close:hover {
+            color: #2563EB;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Navigation -->
+    <nav class="fixed top-4 left-4 right-4 z-50 rounded-2xl px-6 py-4 flex justify-between items-center max-w-7xl mx-auto backdrop-blur-md bg-black/80 shadow-sm border border-white/10">
+        <a href="index.html" class="text-2xl font-bold font-space-grotesk text-white hover:text-cta transition-colors duration-200 cursor-pointer">
+            ← 返回首页
+        </a>
+        <a href="index.html#work" class="text-gray-400 hover:text-white transition-colors duration-200 cursor-pointer">
+            查看更多作品
+        </a>
+    </nav>
+    
+    <!-- Main Content -->
+    <main class="pt-32 pb-20 px-6">
+        <div class="max-w-6xl mx-auto">
+            <!-- Title Section -->
+            <div class="text-center mb-16 reveal">
+                <span class="inline-block bg-cta/10 text-cta px-4 py-2 rounded-full text-sm font-medium mb-4">企业数字化管理系统</span>
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                    智飞部 CRM 系统
+                </h1>
+                <p class="text-xl text-secondary max-w-3xl mx-auto leading-relaxed">
+                    启程智远集团旗下的企业一体化数字管理协同平台，主打企业内部经营、销售拓客、全流程办公数字化
+                </p>
+            </div>
+            
+            <!-- Visual Showcase Section -->
+            <section class="mb-20 reveal">
+                <h2 class="text-3xl font-bold mb-8 text-center">视觉精选</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Image 1 -->
+                    <div class="image-card bg-[#18181B] rounded-2xl overflow-hidden shadow-lg border border-white/10">
+                        <img src="https://i.postimg.cc/jdRBFKGq/1.png" alt="CRM 系统界面设计 1" class="w-full h-64 object-cover" loading="lazy">
+                    </div>
+                    <!-- Image 2 -->
+                    <div class="image-card bg-[#18181B] rounded-2xl overflow-hidden shadow-lg border border-white/10">
+                        <img src="https://i.postimg.cc/tThmBmkH/2.png" alt="CRM 系统界面设计 2" class="w-full h-64 object-cover" loading="lazy">
+                    </div>
+                    <!-- Image 3 -->
+                    <div class="image-card bg-[#18181B] rounded-2xl overflow-hidden shadow-lg border border-white/10">
+                        <img src="https://i.postimg.cc/Y9qmPvfM/3.png" alt="CRM 系统界面设计 3" class="w-full h-64 object-cover" loading="lazy">
+                    </div>
+                    <!-- Image 4 -->
+                    <div class="image-card bg-[#18181B] rounded-2xl overflow-hidden shadow-lg border border-white/10">
+                        <img src="https://i.postimg.cc/fbv95cdF/4.png" alt="CRM 系统界面设计 4" class="w-full h-64 object-cover" loading="lazy">
+                    </div>
+                    <!-- Image 5 -->
+                    <div class="image-card bg-[#18181B] rounded-2xl overflow-hidden shadow-lg border border-white/10">
+                        <img src="https://i.postimg.cc/Px38nd26/5.png" alt="CRM 系统界面设计 5" class="w-full h-64 object-cover" loading="lazy">
+                    </div>
+                    <!-- Image 6 -->
+                    <div class="image-card bg-[#18181B] rounded-2xl overflow-hidden shadow-lg border border-white/10">
+                        <img src="https://i.postimg.cc/Dyb4Rksr/6.png" alt="CRM 系统界面设计 6" class="w-full h-64 object-cover" loading="lazy">
+                    </div>
+                    <!-- Image 7 -->
+                    <div class="image-card bg-[#18181B] rounded-2xl overflow-hidden shadow-lg border border-white/10">
+                        <img src="https://i.postimg.cc/ZRcxBkj9/7.png" alt="CRM 系统界面设计 1" class="w-full h-64 object-cover" loading="lazy">
+                    </div>
+                    <!-- Image 8 -->
+                    <div class="image-card bg-[#18181B] rounded-2xl overflow-hidden shadow-lg border border-white/10">
+                     <img src="https://i.postimg.cc/2SQb8Q0n/8.png" alt="CRM 系统界面设计 1" class="w-full h-64 object-cover" loading="lazy">
+                    </div>
+                    <!-- Image 9 -->
+                    <div class="image-card bg-[#18181B] rounded-2xl overflow-hidden shadow-lg border border-white/10">
+                     <img src="https://i.postimg.cc/ZqJ99WgZ/9.png" alt="CRM 系统界面设计 1" class="w-full h-64 object-cover" loading="lazy">
+                    </div>
+                    <!-- Image 10 -->
+                    <div class="image-card bg-[#18181B] rounded-2xl overflow-hidden shadow-lg border border-white/10">
+                     <img src="https://i.postimg.cc/hj5h3ptM/10.png" alt="CRM 系统界面设计 1" class="w-full h-64 object-cover" loading="lazy">
+                    </div>
+                    <!-- Image 11 -->
+                    <div class="image-card bg-[#18181B] rounded-2xl overflow-hidden shadow-lg border border-white/10">
+                     <img src="https://i.postimg.cc/RqrhvhfW/11.png" alt="CRM 系统界面设计 1" class="w-full h-64 object-cover" loading="lazy">
+                    </div>
+                    <!-- Image 12 -->
+                    <div class="image-card bg-[#18181B] rounded-2xl overflow-hidden shadow-lg border border-white/10">
+                     <img src="https://i.postimg.cc/Sj0RmR8f/12.png" alt="CRM 系统界面设计 1" class="w-full h-64 object-cover" loading="lazy">
+                    </div>
+                    <!-- Image 13 -->
+                    <div class="image-card bg-[#18181B] rounded-2xl overflow-hidden shadow-lg border border-white/10">
+                     <img src="https://i.postimg.cc/Kc15cWBf/13.png" alt="CRM 系统界面设计 1" class="w-full h-64 object-cover" loading="lazy">
+                    </div>
+                </div>
+                <p class="text-center text-secondary mt-8 text-sm">* 以上为占位图片，后期将替换为实际作品集图片</p>
+            </section>
+            
+                        <!-- Project Link Section -->
+            <section class="reveal">
+                <div class="bg-[#18181B] rounded-3xl p-8 md:p-12 shadow-xl border border-white/10">
+                    <h2 class="text-3xl font-bold mb-6 text-center text-white">项目线上</h2>
+                    <div class="max-w-2xl mx-auto">
+                        <div class="bg-gradient-to-br from-purple-900/30 to-indigo-900/30 rounded-2xl p-8 mb-6 border border-purple-500/30">
+                            <div class="flex items-start gap-4">
+                                <div class="flex-shrink-0 w-12 h-12 bg-purple-600 rounded-xl flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                    </svg>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="text-lg font-semibold text-white mb-2">企业内部平台</h3>
+                                    <p class="text-gray-400">此项目为企业内部使用的管理平台，暂无网址查看</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+    
+    <!-- Footer -->
+    <footer class="py-8 px-6 border-t border-white/10">
+        <div class="max-w-7xl mx-auto text-center">
+            <p class="text-gray-400 text-sm">
+                © 2026 杨一楠。All rights reserved.
+            </p>
+        </div>
+    </footer>
+    
+    <!-- Lightbox Modal -->
+    <div class="lightbox" id="lightbox">
+        <span class="lightbox-close">&times;</span>
+        <img src="" alt="放大预览" class="lightbox-img" id="lightbox-img">
+    </div>
+    
+    <!-- Copy Success Toast -->
+    <div class="fixed bottom-6 right-6 bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg transform translate-y-20 opacity-0 transition-all duration-300" id="copy-toast">
+        <div class="flex items-center">
+            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            <span>链接已复制到剪贴板！</span>
+        </div>
+    </div>
+    
+    <script>
+        // Scroll Reveal Animation
+        function reveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            reveals.forEach(element => {
+                const windowHeight = window.innerHeight;
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 100;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    element.classList.add('active');
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', reveal);
+        reveal(); // Initial check
+        
+        // Lightbox Functionality
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxClose = document.querySelector('.lightbox-close');
+        const imageCards = document.querySelectorAll('.image-card img');
+        
+        imageCards.forEach(img => {
+            img.addEventListener('click', () => {
+                lightboxImg.src = img.src;
+                lightbox.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+        
+        lightboxClose.addEventListener('click', () => {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+        
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+        
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+        
+        // Initialize
+        console.log('Project detail page loaded successfully!');
+    </script>
+</body>
+</html>

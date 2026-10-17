@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>动态视觉呈现 | 启程智远集团官网</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#18181B',
+                        secondary: '#3F3F46',
+                        cta: '#2563EB',
+                        background: '#FAFAFA',
+                        text: '#09090B'
+                    },
+                    fontFamily: {
+                        archivo: ['Archivo', 'sans-serif'],
+                        'space-grotesk': ['Space Grotesk', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        * {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Archivo', sans-serif;
+            background-color: #FAFAFA;
+            color: #09090B;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .video-card {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .video-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+        }
+        
+        .video-label {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            backdrop-filter: blur(4px);
+            z-index: 10;
+        }
+        
+        .video-placeholder {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .play-button {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(4px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .play-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+        
+        .play-icon {
+            width: 0;
+            height: 0;
+            border-left: 24px solid white;
+            border-top: 14px solid transparent;
+            border-bottom: 14px solid transparent;
+            margin-left: 8px;
+        }
+        
+        .btn-primary {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Navigation -->
+    <nav class="fixed top-4 left-4 right-4 z-50 rounded-2xl px-6 py-4 flex justify-between items-center max-w-7xl mx-auto backdrop-blur-md bg-background/90 shadow-sm">
+        <a href="project-official.html" class="text-2xl font-bold font-space-grotesk hover:text-cta transition-colors duration-200 cursor-pointer">
+            ← 返回上一页
+        </a>
+        <a href="index.html" class="text-secondary hover:text-primary transition-colors duration-200 cursor-pointer">
+            返回首页
+        </a>
+    </nav>
+    
+    <!-- Main Content -->
+    <main class="pt-32 pb-20 px-6">
+        <div class="max-w-6xl mx-auto">
+            <!-- Title Section -->
+            <div class="text-center mb-16 reveal">
+                <span class="inline-block bg-cta/10 text-cta px-4 py-2 rounded-full text-sm font-medium mb-4">动态视觉呈现</span>
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                    动态影像与视频创意
+                </h1>
+                <p class="text-xl text-secondary max-w-3xl mx-auto leading-relaxed">
+                    探索动态设计在品牌传播中的力量
+                </p>
+            </div>
+            
+            <!-- Video Gallery Section -->
+            <section class="space-y-12 reveal">
+                <!-- Video 1 -->
+                <div class="video-card bg-white rounded-2xl overflow-hidden shadow-lg">
+                    <div class="video-label">展示说明</div>
+                    <video controls class="w-full aspect-video">
+                        <source src="https://s21.aconvert.com/convert/p3r68-cdx67/5ucqd-4zjap.mp4" type="video/mp4">
+                        您的浏览器不支持视频标签。
+                    </video>
+                </div>
+                
+                <!-- Video 2 -->
+                <div class="video-card bg-white rounded-2xl overflow-hidden shadow-lg">
+                    <div class="video-label">展示说明</div>
+                    <div class="video-placeholder aspect-video w-full">
+                        <div class="play-button">
+                            <div class="play-icon"></div>
+                        </div>
+                    </div>
+                    <!-- 视频嵌入位置（后续替换） -->
+                    <!-- 
+                    <video controls class="w-full">
+                        <source src="your-video-2.mp4" type="video/mp4">
+                        您的浏览器不支持视频标签。
+                    </video> 
+                    -->
+                </div>
+                
+                <!-- Video 3 -->
+                <div class="video-card bg-white rounded-2xl overflow-hidden shadow-lg">
+                    <div class="video-label">展示说明</div>
+                    <div class="video-placeholder aspect-video w-full">
+                        <div class="play-button">
+                            <div class="play-icon"></div>
+                        </div>
+                    </div>
+                    <!-- 视频嵌入位置（后续替换） -->
+                    <!-- 
+                    <video controls class="w-full">
+                        <source src="your-video-3.mp4" type="video/mp4">
+                        您的浏览器不支持视频标签。
+                    </video> 
+                    -->
+                </div>
+            </section>
+            
+            <!-- Back to Category -->
+            <div class="text-center mt-16 reveal">
+                <a href="project-official.html" class="btn-primary inline-block bg-primary text-white px-8 py-4 rounded-full font-medium hover:bg-secondary transition-all duration-300">
+                    ← 返回作品分类
+                </a>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="py-8 px-6 border-t border-gray-200">
+        <div class="max-w-7xl mx-auto text-center">
+            <p class="text-secondary text-sm">
+                © 2026 杨一楠。All rights reserved.
+            </p>
+        </div>
+    </footer>
+    
+    <script>
+        // Scroll Reveal Animation
+        function reveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            reveals.forEach(element => {
+                const windowHeight = window.innerHeight;
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 100;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    element.classList.add('active');
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', reveal);
+        reveal(); // Initial check
+        
+        console.log('Motion Design page loaded successfully!');
+    </script>
+</body>
+</html>
